@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment | MediCare Portal{% endblock %}
+{% block content %}
+<div class="card" style="margin-bottom: 2rem;">
+  <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+    <div>
+      <h1 class="page-title" style="margin-bottom: 0.25rem;">{{ doctor.user.name }}</h1>
+      <span class="badge badge-completed" style="font-size: 0.85rem;">{{ doctor.specialization }}</span>
+    </div>
+    <a href="{{ url_for('patient.dashboard') }}" class="btn btn-secondary btn-sm">← Back to search</a>
+  </div>
+  {% if doctor.bio %}
+  <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.6;">{{ doctor.bio }}</p>
+  {% endif %}
+</div>
+
+<h2 class="section-title">🕒 Available Slots</h2>
+<div class="slots-grid">
+  {% for slot in slots %}
+  <div class="slot-card" data-testid="slot-card">
+    <div>
+      <div style="font-size: 0.85rem; font-weight: 600; color: var(--teal-accent); margin-bottom: 0.2rem;">📅 {{
+        slot.slot_date }}</div>
+      <div class="slot-time">⏰ {{ slot.start_time }} - {{ slot.end_time }}</div>
+      <div class="slot-capacity" style="margin-top: 0.5rem;">Booked: <strong>{{ slot.booked_count }}/{{ slot.capacity
+          }}</strong></div>
+    </div>
+    <div>
+      {% if slot.is_full() %}
+      <span class="badge badge-cancelled error"
+        style="width: 100%; justify-content: center; padding: 0.5rem;">(Full)</span>
+      {% else %}
+      <form method="POST" action="{{ url_for('patient.book', slot_id=slot.id) }}">
+        <button type="submit" data-qa="book-slot-button" class="btn btn-full btn-sm">Book this slot</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <p data-testid="no-slots" style="color: var(--text-secondary); font-style: italic;">No upcoming slots available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

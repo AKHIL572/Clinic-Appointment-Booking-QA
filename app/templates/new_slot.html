@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Add Slot | MediCare Portal{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Add Slot for {{ doctor.user.name }}</h1>
+</div>
+
+<div class="form-card">
+  <form method="POST">
+    <div class="form-group">
+      <label for="slot-date">Date</label>
+      <input type="date" name="slot_date" id="slot-date" required>
+    </div>
+
+    <div class="form-group">
+      <label for="slot-start">Start Time (HH:MM)</label>
+      <input type="text" name="start_time" id="slot-start" placeholder="09:00" required>
+    </div>
+
+    <div class="form-group">
+      <label for="slot-end">End Time (HH:MM)</label>
+      <input type="text" name="end_time" id="slot-end" placeholder="09:30" required>
+    </div>
+
+    <div class="form-group">
+      <label for="slot-capacity">Capacity</label>
+      <input type="number" name="capacity" id="slot-capacity" value="1" min="1" required>
+    </div>
+
+    <button type="submit" data-qa="save-slot-button" class="btn btn-full">Save Slot</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard | MediCare Portal{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Doctor Dashboard</h1>
+</div>
+
+{% if not profile %}
+<div class="alert alert-error error">No doctor profile found for this account.</div>
+{% endif %}
+
+<h2 class="section-title">🩺 My Schedule</h2>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appt in appointments %}
+      <tr data-testid="appointment-row">
+        <td><strong>{{ appt.patient.name }}</strong></td>
+        <td>{{ appt.slot.slot_date }}</td>
+        <td>{{ appt.slot.start_time }}</td>
+        <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+        <td>
+          {% if appt.status == 'confirmed' %}
+          <form method="POST" action="{{ url_for('doctor.complete', appointment_id=appt.id) }}" style="display:inline">
+            <button type="submit" data-qa="complete-button" class="btn btn-success btn-sm">Mark Complete</button>
+          </form>
+          {% else %}
+          <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No appointments
+          scheduled.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

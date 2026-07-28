@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | MediCare Portal{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Admin Dashboard</h1>
+  <a href="{{ url_for('admin.new_doctor') }}" data-qa="add-doctor-link" class="btn">+ Add Doctor</a>
+</div>
+
+<h2 class="section-title">👨‍⚕️ Doctors Directory</h2>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Specialization</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in doctors %}
+      <tr data-testid="doctor-row">
+        <td><strong>{{ d.user.name }}</strong></td>
+        <td>{{ d.specialization }}</td>
+        <td>
+          <a href="{{ url_for('admin.new_slot', doctor_id=d.id) }}" class="btn btn-secondary btn-sm">+ Add Slot</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="3" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No doctors registered
+          yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="section-title">🕒 Slot Allocations</h2>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Capacity</th>
+        <th>Booked By</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for slot in slots %}
+      <tr data-testid="slot-row">
+        <td><strong>{{ slot.doctor.user.name }}</strong></td>
+        <td>{{ slot.slot_date }}</td>
+        <td>{{ slot.start_time }} – {{ slot.end_time }}</td>
+        <td>{{ slot.booked_count }} / {{ slot.capacity }}</td>
+        <td>
+          {% if slot.appointments %}
+          {% for appt in slot.appointments %}
+          <div style="margin-bottom: 0.25rem;">
+            {{ appt.patient.name }}
+            <span class="badge badge-{{ appt.status }}" style="margin-left: 0.25rem;">{{ appt.status }}</span>
+          </div>
+          {% endfor %}
+          {% else %}
+          <span style="color: var(--text-muted);">No bookings yet</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('admin.new_slot', doctor_id=slot.doctor_id) }}" class="btn btn-secondary btn-sm">+ Add
+            Slot</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No slots created yet.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="section-title">📊 All System Appointments</h2>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in appointments %}
+      <tr data-testid="admin-appointment-row">
+        <td>{{ a.patient.name }}</td>
+        <td>{{ a.slot.doctor.user.name }}</td>
+        <td>{{ a.slot.slot_date }}</td>
+        <td>{{ a.slot.start_time }} – {{ a.slot.end_time }}</td>
+        <td><span class="badge badge-{{ a.status }}">{{ a.status }}</span></td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No appointments booked
+          yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
