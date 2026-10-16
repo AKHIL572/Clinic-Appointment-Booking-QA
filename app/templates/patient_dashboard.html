@@ -32,13 +32,14 @@
 
 <h2 class="section-title">📅 My Appointments</h2>
 <div class="table-container">
-  <table id="cart_info_table">
+  <table id="appointments-table">
     <thead>
       <tr>
         <th>Doctor</th>
         <th>Date</th>
         <th>Time</th>
         <th>Status</th>
+        <th>Prescription</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -52,6 +53,22 @@
           <span class="badge badge-{{ appt.status }}">{{ appt.status }}</span>
         </td>
         <td>
+          {% if appt.prescription_filename %}
+          <div data-testid="prescription-name"
+            style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">📎 {{
+            appt.prescription_filename }}</div>
+          {% endif %}
+          {% if appt.status != 'cancelled' %}
+          <form method="POST" action="{{ url_for('patient.upload_prescription', appointment_id=appt.id) }}"
+            enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <input type="file" name="prescription" accept=".pdf,.jpg,.jpeg,.png" data-qa="upload-input" required>
+            <button type="submit" data-qa="upload-button" class="btn btn-secondary btn-sm">Upload</button>
+          </form>
+          {% elif not appt.prescription_filename %}
+          <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
+          {% endif %}
+        </td>
+        <td>
           {% if appt.status in ['requested', 'confirmed'] %}
           <form method="POST" action="{{ url_for('patient.cancel', appointment_id=appt.id) }}" style="display:inline">
             <button type="submit" data-qa="cancel-button" class="btn btn-danger btn-sm">Cancel</button>
@@ -63,7 +80,8 @@
       </tr>
       {% else %}
       <tr>
-        <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 2rem;"><b>Cart is empty!</b>
+        <td colspan="6" data-testid="no-appointments"
+          style="text-align: center; color: var(--text-secondary); padding: 2rem;"><b>No appointments yet.</b>
         </td>
       </tr>
       {% endfor %}
