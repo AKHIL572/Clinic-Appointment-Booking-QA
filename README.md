@@ -2,6 +2,8 @@
 
 **An End-to-End QA Portfolio Project: Manual STLC, Jira Agile Process & Selenium/pytest UI Automation**
 
+[![UI Test Automation](https://github.com/AKHIL572/clinic-appointment-booking-qa/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/AKHIL572/clinic-appointment-booking-qa/actions/workflows/ui-tests.yml)
+
 **Status:** ✅ Completed (QA Cycle Closed — v1.0 → v1.1 + Post-Closure UI Automation Suite)  
 **Role:** QA Analyst & Automation Engineer (also built the application under test)  
 **Type:** Manual + API Testing, UI Test Automation (POM), Defect Lifecycle Management, Agile QA Process  
