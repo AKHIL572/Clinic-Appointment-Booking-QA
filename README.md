@@ -26,6 +26,7 @@ Originally inspired by requirements gathering for an Ayurvedic healthcare clinic
 - **Defect Lifecycle Management:** Uncover, report, triage, verify fixes, and formally close defects (CQA-1, CQA-2, CQA-3) through full lifecycles in Jira.
 - **Root-Cause Investigation:** Use browser DevTools and direct SQLite database inspection scripts to distinguish genuine defects from environmental or data discrepancies.
 - **UI Test Automation Framework:** Build a modular, production-grade test automation suite using **Python, pytest, Selenium WebDriver, and the Page Object Model (POM)** with 39 automated tests.
+- **Continuous Integration (CI):** Run automated test suites headlessly in cloud containers on every push and pull request via **GitHub Actions** with failure artifact capture.
 
 ---
 
@@ -113,6 +114,9 @@ Following the manual STLC closure, a comprehensive UI test automation suite was 
 
 ```
 clinic-app/
+├── .github/                             # Continuous Integration Workflows
+│   └── workflows/
+│       └── ui-tests.yml                 # GitHub Actions pipeline (headless Chrome, pytest)
 ├── app/                                 # Flask Application Source Code
 │   ├── __init__.py                      # Application factory & blueprint registration
 │   ├── models.py                        # SQLAlchemy models (User, DoctorProfile, Slot, Appointment)
@@ -156,6 +160,7 @@ clinic-app/
 ├── seed_data.py                         # Test database seeder with sample doctors & slots
 ├── run.py                               # Application entry point
 ├── requirements.txt                     # Application dependencies
+├── .gitignore                           # Git ignore rules for Python bytecode and test artifacts
 └── README.md                            # Comprehensive project overview
 ```
 
@@ -167,6 +172,7 @@ clinic-app/
 |---|---|
 | **Application Under Test** | Python 3.13, Flask, Flask-SQLAlchemy, Flask-Login, SQLite, Jinja2, HTML5/CSS3 |
 | **Test Automation** | pytest 9.x, Selenium WebDriver 4.x, Page Object Model (POM), Chrome WebDriver |
+| **Continuous Integration (CI)** | GitHub Actions (automated headless test runs, failure artifact capture) |
 | **Test Management** | Jira Cloud (Scrum Space, Epics, Tasks, Bug Tracking, Release Management, Labels) |
 | **QA Documentation** | Microsoft Word (Test Strategy, Test Plan, Closure Report), Microsoft Excel (RTM & Test Repository) |
 | **Diagnostics & API** | Chrome DevTools (DOM, Network, Console), Python SQLite Inspection Scripts, REST JSON API |
@@ -236,6 +242,17 @@ python -m pytest tests/test_patient_booking.py
 Failed tests save a screenshot to `ui_tests/screenshots/`. Re-run `python seed_data.py` to reset the database between runs if needed.
 
 Latest run: **38 passed, 1 expected failure (xfail)**.
+
+---
+
+### 5. Continuous Integration (GitHub Actions)
+
+A GitHub Actions workflow ([`.github/workflows/ui-tests.yml`](.github/workflows/ui-tests.yml)) automatically executes on every `push` and `pull_request` to `main`:
+1. Launches an Ubuntu virtual environment with Python 3.12.
+2. Installs requirements and seeds the SQLite database (`python seed_data.py`).
+3. Starts the Flask server in the background and waits for availability.
+4. Executes all 39 Selenium tests in headless mode (`HEADLESS=1 python -m pytest -v`).
+5. Captures and uploads test failure screenshots as workflow run artifacts if any test fails.
 
 ---
 
