@@ -1,220 +1,251 @@
 # Clinic Appointment Booking System
 
-**An End-to-End QA Project: Manual, API and UI Automation Testing**
+**An End-to-End QA Portfolio Project: Manual STLC, Jira Agile Process & Selenium/pytest UI Automation**
 
-**Status:** ✅ Completed (QA cycle closed, v1.0 → v1.1), with UI automation suite added afterwards
-**Role:** QA Analyst (also built the application under test)
-**Type:** Manual + API Testing, UI Automation (Selenium), Defect Lifecycle Management, Agile QA Process
+**Status:** ✅ Completed (QA Cycle Closed — v1.0 → v1.1 + Post-Closure UI Automation Suite)  
+**Role:** QA Analyst & Automation Engineer (also built the application under test)  
+**Type:** Manual + API Testing, UI Test Automation (POM), Defect Lifecycle Management, Agile QA Process  
 
 ---
 
-## Purpose
+## 🎯 Purpose & Overview
 
-This project demonstrates a complete, independent Software Testing Life Cycle (STLC) on a real, purpose-built application, not a public demo site, so that every requirement, test case, defect, and fix reflects genuine hands-on QA work.
+This project demonstrates a complete, independent **Software Testing Life Cycle (STLC)** conducted on a purpose-built, multi-role clinic application — rather than a generic public demo site. Every requirement, test case, defect, root-cause investigation, and automated test reflects genuine, end-to-end QA engineering.
 
-## Goal / Objective
+Originally inspired by requirements gathering for an Ayurvedic healthcare clinic (BRD/SRS domain), the system was built and tested to simulate real-world healthcare scheduling challenges: role segregation, slot contention, schedule visibility, and prescription document handling.
 
-- Design and execute a full manual + API test cycle across a multi-role application (Patient / Doctor / Admin)
-- Practice Agile QA workflow using Jira: Epics, Tasks, Bugs, Releases
-- Find genuine defects through exploratory and structured testing, and carry each through a full defect lifecycle (Open → Fixed → Retest → Closed)
-- Produce professional QA documentation: Test Strategy, Test Plan, RTM, Test Case Repository, Test Closure Report
-- Automate the UI regression suite with Selenium WebDriver and pytest using the Page Object Model
+---
 
-## Problem Statement
+## 🚀 Key Objectives
 
-Clinics need a system for patients to discover doctors by specialization, view available appointment slots, and book or cancel appointments, while doctors need visibility into their schedules, and admins need to onboard doctors and manage slot availability. This mirrors the domain of a prior Business Analyst project (BRD/SRS for an Ayurvedic clinic), giving continuity between requirements-gathering and hands-on QA work.
+- **Full STLC Ownership:** Drive testing from requirements analysis, test strategy, and test plan design through execution, defect resolution, and formal test closure.
+- **Agile QA in Jira:** Manage testing with Scrum artifacts (5 Epics, 15 Tasks, Releases v1.0 & v1.1, Labels, and Defect tracking).
+- **Comprehensive Functional & API Validation:** Execute 41 structured manual and API test cases tracked with a live formula-driven Requirement Traceability Matrix (RTM).
+- **Defect Lifecycle Management:** Uncover, report, triage, verify fixes, and formally close defects (CQA-1, CQA-2, CQA-3) through full lifecycles in Jira.
+- **Root-Cause Investigation:** Use browser DevTools and direct SQLite database inspection scripts to distinguish genuine defects from environmental or data discrepancies.
+- **UI Test Automation Framework:** Build a modular, production-grade test automation suite using **Python, pytest, Selenium WebDriver, and the Page Object Model (POM)** with 39 automated tests.
 
-## Application Features
+---
 
-**Patient**
-- Register and log in
-- Search doctors by specialization
-- View a doctor's available appointment slots
-- Book and cancel appointments
-- Upload a prescription file (PDF/JPG/PNG) against an appointment
+## 🏥 Application Under Test
 
-**Doctor**
-- View assigned appointments
-- Mark an appointment as complete
+A multi-role healthcare scheduling platform built with Flask, SQLAlchemy, and SQLite:
 
-**Admin**
-- Create new doctor profiles
-- Allocate appointment slots (date, time, capacity) per doctor
-- View all doctors, their slots, and all system-wide appointments
+### 1. Patient Portal
+- User registration and authenticated login with session handling.
+- Doctor discovery with real-time search filtering by medical specialization.
+- Slot browsing, real-time availability checks, booking, and cancellation.
+- Prescription upload against confirmed appointments (`.pdf` support).
 
-**REST API**
-- All core actions (register, login, search, book, cancel) available as JSON endpoints with correct status codes, independently testable via Postman/curl
+### 2. Doctor Portal
+- Dedicated schedule dashboard listing upcoming patient appointments.
+- Status management (marking appointments as completed).
+- Strict role isolation (doctors can only view their own appointments).
 
-## What Was Tested
+### 3. Admin Panel
+- Doctor profile creation with duplicate email conflict prevention.
+- Slot allocation management (specifying doctor, date, time window, and capacity).
+- System-wide visibility of all doctors, allocated slots, and booked patients.
 
-### Manual and API testing (QA cycle v1.0 → v1.1)
-- Exploratory, black-box functional testing across all modules by hand, before formal test case design
-- 41 formal manual/API test cases designed and executed, tracked in a Requirement Traceability Matrix (RTM) with live formulas
-- Authentication: valid/invalid login, weak passwords, duplicate emails, role-based redirection, logout/session handling
-- Booking logic: valid booking, full-capacity slots, past-date slots, duplicate bookings by the same patient, cancellation, and re-booking after cancellation
-- Doctor dashboard: appointment visibility, marking appointments complete
-- Admin panel: doctor creation, slot allocation, duplicate-email handling
-- REST API: status codes and validation across register/login/list/book/cancel endpoints, plus role-boundary enforcement (a patient cannot reach admin-only routes)
-- Two suspected issues were investigated and ruled out using direct evidence (browser DevTools DOM inspection and a custom database-inspection script) rather than being assumed to be defects
-- 3 genuine defects were found, root-caused, fixed, retested, and formally closed
-- A post-redesign regression check caught a real regression (duplicated "Dr." title) before closure
+### 4. REST API Layer
+- JSON REST API endpoints mirroring core UI workflows (`/api/register`, `/api/login`, `/api/doctors`, `/api/book`, `/api/cancel`), validated for status codes, payloads, and unauthorized access protection.
 
-**Explicitly not covered:** payment processing, performance/load testing, security/penetration testing, and email/SMS notifications (mocked out).
+---
 
-### UI automation (Selenium)
-- 39 automated UI tests (38 pass, 1 expected failure documenting a known limitation)
-- Authentication: role-based landing pages, invalid login, empty form, duplicate email, short password, logout
-- Role boundaries: all six cross-role page combinations return "Forbidden", anonymous users are blocked
-- Patient booking: search by specialization, book, cancel, re-book after cancel, full slot, duplicate booking, past slots hidden
-- Doctor: sees only their own patients, marks an appointment complete
-- Admin: add doctor, duplicate doctor email, slot and bookings visible on the dashboard
-- Prescription upload: valid PDF accepted, unsupported file type rejected, no upload option on cancelled appointments
-- One regression test per closed defect (CQA-1, CQA-2, CQA-3)
+## 🧪 Testing Methodology & Scope
 
-## Methodology
+### 1. Test Planning & Documentation
+Authored formal QA documentation adhering to industry standards:
+- **[Test Strategy & Test Plan](docs/Test_Strategy_and_Test_Plan.docx):** Test scope, risk assessment, entry/exit criteria, environments, and severity/priority matrix.
+- **[Requirement Traceability Matrix & Test Repository](docs/QA_Test_Cases_and_RTM.xlsx):** 41 manual & API test cases mapped 1-to-1 with functional requirements, formula-driven metrics, and defect cross-references.
+- **[Test Closure Report](docs/Test_Closure_Report.docx):** Formal exit criteria evaluation, defect resolution audit, and post-closure automation addendum.
 
-1. Built the application (Flask + SQLite) with three roles, modeled on a real clinic-booking domain
-2. Authored the Test Strategy & Test Plan (scope, approach, entry/exit criteria, defect severity/priority matrix, risks)
-3. Set up Jira (Scrum-template Space), including Releases (v1.0 Baseline, v1.1 Post-Redesign Fixes) and Labels (in place of Components, which team-managed Spaces don't support)
-4. Created 5 Epics: Authentication, Slot Booking, Doctor Dashboard, Admin Panel, API Layer
-5. Created 3 Tasks per Epic (Design test cases, Set up test environment, Execute test cases), 15 Tasks total
-6. Performed exploratory black-box functional testing across all modules
-7. Designed 41 formal test cases and built the RTM
-8. Found and logged 3 genuine defects in Jira, each with steps to reproduce, severity, and priority
-9. Investigated two suspected issues and ruled them out with direct evidence, documenting the reasoning rather than filing false tickets
-10. Fixed all 3 confirmed defects, retested each, and closed the tickets
-11. Released v1.1 in Jira once all linked defects were verified closed
-12. Authored the Test Closure Report, evaluating exit criteria honestly, including what was *not* fully completed
-13. Automated the UI regression suite with Selenium + pytest (Page Object Model) and ran it against the application
+### 2. Jira Agile Workflow
+- **Epics (5):** Authentication, Slot Booking, Doctor Dashboard, Admin Panel, REST API Layer.
+- **Tasks (15):** 3 Tasks per Epic (Test Design, Environment Setup, Execution).
+- **Releases:** `v1.0 Baseline` and `v1.1 Post-Redesign & Fixes`.
+- **Labels:** Utilized in place of components for modular filtering across the team-managed Scrum space.
 
-## Defects Found, Fixed, and Closed
+### 3. Investigation & Diagnostic Integrity
+Suspected anomalies were rigorously investigated using direct technical evidence before logging tickets:
+- DOM structure inspected via Chrome DevTools to verify element states and flash messaging.
+- Database state validated using custom Python inspection scripts (`inspect_db.py`, `inspect_users.py`) to confirm whether data was properly committed or if discrepancies were caused by past-dated test data.
 
-| Defect ID | Summary | Severity | Status |
-|---|---|---|---|
-| CQA-1 | Duplicate booking attempt on a full-capacity slot returned a misleading "slot is fully booked" error instead of "you already have a booking" | Medium | Closed |
-| CQA-2 | Admin dashboard did not display existing slots per doctor, only a link to add new ones | Medium | Closed |
-| CQA-3 | Doctor name displayed with a duplicated "Dr." prefix after a UI redesign (regression) | Low | Closed |
+---
 
-### Issues found while building the automation (fixed)
-- Prescription upload had a backend route but no upload control on the patient dashboard, so the feature could not be used from the UI. An upload form was added.
-- The appointments empty state read "Cart is empty!" (leftover wording from a shopping-site demo). It now reads "No appointments yet."
+## 🐛 Defects Found, Fixed & Closed
 
-## Project Structure
+All defects were logged in Jira with full reproduction steps, severity/priority triage, linked requirements, verified via retesting, and released under `v1.1`:
+
+| Defect ID | Summary | Severity | Priority | Status | Automated Regression Test |
+|---|---|---|---|---|---|
+| **CQA-1** | Replaying a booking POST on a full slot that the patient already booked displayed a misleading *"slot is fully booked"* error instead of *"You already have a booking for this slot."* | Medium | High | **Closed** | `test_cqa1_duplicate_booking_of_own_full_slot_says_already_booked` |
+| **CQA-2** | Admin dashboard omitted existing allocated slots per doctor, displaying only an "Add Slot" action. | Medium | Medium | **Closed** | `test_cqa2_admin_dashboard_lists_slots_and_who_booked` |
+| **CQA-3** | UI redesign regression caused doctor names to display with a duplicated prefix (`Dr. Dr. <Name>`). | Low | Low | **Closed** | `test_cqa3_doctor_name_has_no_duplicated_prefix` |
+
+---
+
+## 🤖 Automated UI Testing Suite (`ui_tests`)
+
+Following the manual STLC closure, a comprehensive UI test automation suite was developed using **Selenium WebDriver + pytest** and the **Page Object Model (POM)** pattern.
+
+### Framework Features:
+- **Page Object Model (POM):** Clean separation of element locators and page interactions (`pages/`) from test assertions (`tests/`).
+- **Resilient Locators:** Targeted testing using dedicated `data-qa` and `data-testid` attributes.
+- **Test Isolation:** Every test dynamically creates its own test user and slot fixtures via helper flows (`flows.py`), preventing test cross-contamination.
+- **Explicit Synchronization:** Robust explicit waits (`WebDriverWait`) replacing flaky hardcoded sleeps.
+- **Automatic Failure Artifacts:** Automatic full-page screenshot capture upon test failure saved to `ui_tests/screenshots/`.
+- **Headless & CI-Ready:** Supports both local visible browser execution and headless execution (`HEADLESS=1`).
+
+### Test Coverage (39 Test Cases Collected):
+- **Authentication (`test_auth.py`):** 10 tests covering valid logins for all 3 roles, incorrect password, unregistered email, HTML5 client validation, user registration, duplicate email rejection, and logout session termination.
+- **Role & Access Boundaries (`test_roles.py`):** 9 tests verifying unauthorized route access restrictions (e.g., patient attempting to open `/admin/dashboard`, doctor accessing patient routes, unauthenticated visitors).
+- **Patient Booking (`test_patient_booking.py`):** 10 tests covering specialization filtering, empty search states, single/multi-slot booking, slot capacity release on cancellation, re-booking after cancellation, full slot locking, duplicate booking prevention, past slot hiding, and **CQA-1 regression**.
+- **Doctor Workflow (`test_doctor.py`):** 3 tests covering appointment visibility, marking appointments complete, doctor-patient schedule boundary enforcement, and **CQA-3 regression**.
+- **Admin Workflow (`test_admin.py`):** 4 tests covering doctor account creation, duplicate email rejection, slot allocation, who-booked visibility, **CQA-2 regression**, and strict xfail on time format validation.
+- **Prescription Upload (`test_prescription.py`):** 3 tests covering valid `.pdf` upload, rejection of unsupported file formats (`.txt`), and disabled upload for cancelled appointments.
+
+---
+
+## 📁 Repository Structure
 
 ```
 clinic-app/
-├── README.md                      # This file
-├── run.py                         # Flask entry point
-├── seed_data.py                   # Seeds admin/doctor/patient test accounts + sample slots
-├── requirements.txt
-├── app/
-│   ├── __init__.py                 # App factory, blueprint registration
-│   ├── models.py                   # User, DoctorProfile, Slot, Appointment (SQLAlchemy)
-│   ├── routes/
-│   │   ├── auth.py                 # Register, login, logout
-│   │   ├── patient.py              # Search, book, cancel, upload prescription
-│   │   ├── doctor.py               # View schedule, mark appointment complete
-│   │   ├── admin.py                # Add doctor, add slot, view dashboards
-│   │   └── api.py                  # JSON REST API mirroring the UI actions
-│   └── templates/                  # Jinja2 HTML templates (one per page/role)
-├── ui_tests/                       # Selenium UI automation suite
-│   ├── config.py                   # Base URL, timeouts, seeded accounts
-│   ├── conftest.py                 # Browser fixture, new-patient fixture, failure screenshots
-│   ├── flows.py                    # Reusable multi-step actions (login, book, create slot)
-│   ├── pages/                      # Page Objects (locators + actions, no assertions)
-│   └── tests/                      # auth, roles, patient booking, doctor, admin, prescription
-├── inspect_db.py                   # Diagnostic script: dumps raw Slot table
-├── inspect_users.py                # Diagnostic script: dumps raw User table
-└── docs/                           # All QA documentation deliverables
-    ├── Test_Strategy_and_Test_Plan.docx
-    ├── QA_Test_Cases_and_RTM.xlsx    # 41 test cases + RTM + Defect ID cross-references
-    └── Test_Closure_Report.docx
+├── app/                                 # Flask Application Source Code
+│   ├── __init__.py                      # Application factory & blueprint registration
+│   ├── models.py                        # SQLAlchemy models (User, DoctorProfile, Slot, Appointment)
+│   ├── routes/                          # Modular blueprint controllers
+│   │   ├── admin.py                     # Doctor creation, slot allocation & dashboard
+│   │   ├── api.py                       # REST API endpoints (register, login, slots, book, cancel)
+│   │   ├── auth.py                      # Authentication & session management
+│   │   ├── doctor.py                    # Doctor schedule & status updates
+│   │   └── patient.py                   # Search, booking, cancellation & prescription upload
+│   ├── static/                          # Application CSS and client assets
+│   └── templates/                       # Jinja2 HTML templates with data-qa attributes
+├── docs/                                # Formal QA Documentation Deliverables
+│   ├── QA_Test_Cases_and_RTM.xlsx       # 41 manual test cases + live RTM + defect mappings
+│   ├── Test_Closure_Report.docx         # Formal STLC closure report & automation addendum
+│   └── Test_Strategy_and_Test_Plan.docx # Comprehensive test strategy and IEEE 829 test plan
+├── ui_tests/                            # Selenium WebDriver + pytest Automation Suite
+│   ├── pages/                           # Page Object Model classes
+│   │   ├── admin_pages.py               # Admin dashboard & slot creation page objects
+│   │   ├── auth_pages.py                # Login & registration page objects
+│   │   ├── base_page.py                 # Common BasePage with wait helpers and locator methods
+│   │   ├── doctor_pages.py              # Doctor dashboard page objects
+│   │   └── patient_pages.py             # Patient search, doctor details & dashboard page objects
+│   ├── tests/                           # Pytest automated test specifications
+│   │   ├── test_admin.py                # Admin management & CQA-2 regression
+│   │   ├── test_auth.py                 # Multi-role authentication & validation tests
+│   │   ├── test_doctor.py               # Doctor workflows, boundaries & CQA-3 regression
+│   │   ├── test_patient_booking.py      # Booking engine, capacity & CQA-1 regression
+│   │   ├── test_prescription.py         # Prescription file upload & MIME validation
+│   │   └── test_roles.py                # Role-based access control (RBAC) tests
+│   ├── screenshots/                     # Automated failure screenshot storage
+│   ├── config.py                        # Test URLs, default credentials & timeout parameters
+│   ├── conftest.py                      # Pytest fixtures (WebDriver lifecycle, screenshot hooks)
+│   ├── flows.py                         # Reusable business flows (dynamic registration, slot setup)
+│   ├── pytest.ini                       # Pytest configuration & markers
+│   ├── README.md                        # UI test execution instructions
+│   └── requirements.txt                 # UI test dependencies (pytest, selenium)
+├── uploads/                             # Prescription file upload storage directory
+├── clinic.db                            # SQLite database instance
+├── inspect_db.py                        # Diagnostic utility: inspect raw Slot records
+├── inspect_users.py                     # Diagnostic utility: inspect raw User records
+├── seed_data.py                         # Test database seeder with sample doctors & slots
+├── run.py                               # Application entry point
+├── requirements.txt                     # Application dependencies
+└── README.md                            # Comprehensive project overview
 ```
 
-**Note on defect tracking:** there is no separate "defect log" file. All 3 defects (CQA-1, CQA-2, CQA-3) are tracked as the source of truth in **Jira**, and cross-referenced in the `Defect ID` column of `QA_Test_Cases_and_RTM.xlsx` and summarized in `Test_Closure_Report.docx`. See Jira Workflow Evidence below for screenshots of the actual tickets.
+---
 
-## Tools and Technologies Used
+## 🛠️ Tools & Technologies Used
 
-| Category | Tools |
+| Category | Tools & Libraries |
 |---|---|
-| Application | Python, Flask, Flask-SQLAlchemy, Flask-Login, SQLite, Jinja2, HTML/CSS |
-| Test Management | Jira Cloud (Scrum Space, Epics/Tasks/Bugs, Releases, Labels) |
-| Test Documentation | Microsoft Word (Test Strategy & Plan, Test Closure Report), Excel (RTM + Test Case Repository, formula-driven) |
-| API Testing | Postman collection with scripted assertions, Newman (CLI runner) |
-| UI Automation | Selenium WebDriver (Python), pytest, Page Object Model, explicit waits, fixtures |
-| Debugging / Diagnostics | Browser DevTools (DOM inspection), custom Python scripts for direct database inspection |
+| **Application Under Test** | Python 3.13, Flask, Flask-SQLAlchemy, Flask-Login, SQLite, Jinja2, HTML5/CSS3 |
+| **Test Automation** | pytest 9.x, Selenium WebDriver 4.x, Page Object Model (POM), Chrome WebDriver |
+| **Test Management** | Jira Cloud (Scrum Space, Epics, Tasks, Bug Tracking, Release Management, Labels) |
+| **QA Documentation** | Microsoft Word (Test Strategy, Test Plan, Closure Report), Microsoft Excel (RTM & Test Repository) |
+| **Diagnostics & API** | Chrome DevTools (DOM, Network, Console), Python SQLite Inspection Scripts, REST JSON API |
 
-## Deliverables Produced
+---
 
-- [Test Strategy & Test Plan](docs/Test_Strategy_and_Test_Plan.docx)
-- [Requirement Traceability Matrix + 41 Test Cases](docs/QA_Test_Cases_and_RTM.xlsx) (Excel, formula-driven)
-- Jira project: 5 Epics, 15 Tasks, 3 Bugs (all closed), 2 Releases
-- [Test Closure Report](docs/Test_Closure_Report.docx)
-- Selenium UI automation suite (`ui_tests/`, 39 tests)
-- The application itself (this repository)
+## ⚙️ Setup & Execution Guide
 
-## Jira Workflow Evidence
+### 1. Prerequisites
+- Python 3.10+ installed
+- Google Chrome browser installed
 
-_Screenshots below. Since the Jira site itself is private, these serve as proof of the workflow instead of a live link._
-
-- **Backlog/Board:** all 5 Epics with 15 Tasks nested, marked Done
-  `![Board](docs/screenshots/board.png)`
-- **Sample Bug ticket (CQA-1):** description, severity, steps to reproduce, status
-  `![Bug CQA-1](docs/screenshots/cqa-1.png)`
-- **Releases page:** v1.0 and v1.1, both marked Released
-  `![Releases](docs/screenshots/releases.png)`
-
-## Key Skills Demonstrated
-
-- STLC / Agile QA process ownership from requirement analysis through closure
-- Manual black-box and exploratory testing
-- Test case design, RTM construction, defect severity/priority triage
-- Defect lifecycle management in Jira (Open → Fixed → Retest → Closed)
-- API testing with status-code-level assertions
-- UI test automation with Selenium WebDriver and pytest: Page Object Model, explicit waits, fixtures, independent self-contained tests, failure screenshots
-- Automated regression tests for closed defects
-- Root-cause investigation using DevTools and direct database inspection, distinguishing genuine defects from environmental/data issues
-- Professional QA documentation aligned to real-world formats
-
-## Known Limitations
-
-- Slot creation time fields lack format validation (no AM/PM, no HH:MM enforcement). It is documented and covered by an expected-failure (`xfail`) automated test, and not fixed this cycle.
-- The UI suite takes about 5 minutes for 39 tests because every test sets up its own data through the browser.
-- Not yet implemented: CI pipeline (GitHub Actions), Allure reporting, and a BDD (Gherkin) layer.
-- The REST API is covered by Postman/Newman only, not by the Selenium suite.
-
-## Setup
-
+### 2. Set Up and Run the Clinic Application
 ```bash
+# Clone the repository
+git clone https://github.com/AKHIL572/clinic-appointment-booking-qa.git
+cd clinic-appointment-booking-qa
+
+# Install application dependencies
 pip install -r requirements.txt
-python seed_data.py     # creates clinic.db with sample doctors/slots
-python run.py           # serves on http://127.0.0.1:5000
+
+# Seed the database with test accounts and doctor slots
+python seed_data.py
+
+# Start the Flask web server
+python run.py
 ```
+The application will be live at `http://127.0.0.1:5000`.
 
-## Running the UI automation
+### 3. Seeded Test Credentials
 
-With the app running (second terminal):
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | `admin@clinic.test` | `AdminPass123` |
+| **Doctor** | `anjali@clinic.test` | `DoctorPass123` |
+| **Patient** | `patient@clinic.test` | `PatientPass123` |
+
+---
+
+### 4. Running the UI Test Automation Suite
+
+Open a separate terminal while the application is running:
 
 ```bash
+# Navigate to the test suite directory
 cd ui_tests
+
+# Install test dependencies
 pip install -r requirements.txt
-python -m pytest                 # visible Chrome window
-python -m pytest -k cqa          # only the defect regression tests
-HEADLESS=1 python -m pytest      # no browser window
+
+# Run all 39 automated tests with visible browser
+python -m pytest
+
+# Run headless (recommended for CI pipelines)
+# Windows PowerShell:
+$env:HEADLESS="1"; python -m pytest
+# macOS / Linux:
+HEADLESS=1 python -m pytest
+
+# Run only the defect regression suite (CQA-1, CQA-2, CQA-3)
+python -m pytest -k cqa
+
+# Run a specific test module (e.g., patient booking)
+python -m pytest tests/test_patient_booking.py
 ```
 
 Failed tests save a screenshot to `ui_tests/screenshots/`. Re-run `python seed_data.py` to reset the database between runs if needed.
 
-Latest run: **38 passed, 1 expected failure (xfail)** in about 4 minutes 49 seconds.
-
-## Seeded test accounts
-
-| Role    | Email                  | Password        |
-|---------|-------------------------|------------------|
-| Admin   | admin@clinic.test       | AdminPass123     |
-| Doctor  | anjali@clinic.test      | DoctorPass123    |
-| Patient | patient@clinic.test     | PatientPass123   |
+Latest run: **38 passed, 1 expected failure (xfail)**.
 
 ---
 
-*Prepared by Akhil T V, QA Analyst*
+## 🔍 Known Limitations & Continuous Improvement
+
+1. **Slot Time Input Validation:** Slot creation start/end time fields currently accept free-text without standard time format (`HH:MM`) enforcement. Identified and documented in the Test Closure Report; automated with a strict `@pytest.mark.xfail` test (`test_slot_with_invalid_time_format_is_rejected`) to catch the fix once implemented.
+2. **Notification Simulation:** SMS and email notification flows are mocked at the application layer; integration with third-party providers (e.g., Twilio/SendGrid) is reserved for future cycles.
+
+---
+
+## 👤 Author & QA Analyst
+
+- **Author:** Akhil T V  
+- **Email:** akhilhotttekkat135@gmail.com  
+- **GitHub:** [@AKHIL572](https://github.com/AKHIL572)  
